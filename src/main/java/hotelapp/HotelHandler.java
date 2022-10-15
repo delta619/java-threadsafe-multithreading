@@ -27,6 +27,7 @@ public class HotelHandler {
             result+=("The hotel details are:"+System.lineSeparator());
             result+=hotel.getName() + System.lineSeparator();
             result+=hotel+System.lineSeparator();
+            result = hotel.toString();
         }
         return result;
     }

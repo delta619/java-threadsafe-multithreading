@@ -1,5 +1,6 @@
 package hotelapp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -10,7 +11,7 @@ public class Review implements Comparable<Review> {
     private String title;
     private String reviewText;
     private String userNickname;
-    private LocalDateTime reviewSubmissionTime;
+    private LocalDate reviewSubmissionTime;
 
     public Review(String hotelId, String reviewId, double ratingOverall, String title, String reviewText, String userNickname, String reviewSubmissionTime){
         this.hotelId = hotelId;
@@ -19,7 +20,7 @@ public class Review implements Comparable<Review> {
         this.title = title;
         this.reviewText = reviewText;
         this.userNickname = userNickname;
-        this.reviewSubmissionTime = LocalDateTime.from(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(reviewSubmissionTime));
+        this.reviewSubmissionTime = LocalDate.from(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(reviewSubmissionTime));
     }
 
     public String getReviewId(){
@@ -43,7 +44,7 @@ public class Review implements Comparable<Review> {
         }
         return this.userNickname;
     }
-    public LocalDateTime getReviewSubmissionTime(){
+    public LocalDate getReviewSubmissionTime(){
         return this.reviewSubmissionTime;
     }
     @Override

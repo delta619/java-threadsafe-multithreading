@@ -1,5 +1,6 @@
 package hotelapp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class ReviewWithFreq implements Comparable<ReviewWithFreq> {
@@ -26,7 +27,7 @@ public class ReviewWithFreq implements Comparable<ReviewWithFreq> {
         return word;
     }
 
-    public LocalDateTime getReviewSubmissionTime(){
+    public LocalDate getReviewSubmissionTime(){
         return this.review.getReviewSubmissionTime();
     }
     public String toString() {
