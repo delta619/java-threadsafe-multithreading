@@ -5,33 +5,28 @@ import java.util.*;
 public class HotelHandler {
     private Map<String, Hotel> hotelMap = new TreeMap<>(String::compareTo);
 
-    public HotelHandler(Hotel[] hotels){
-        this.setHotels(hotels);
+    public HotelHandler(){
     }
 
-    public void setHotels(Hotel[] hotels){
+    public void insertHotels(Hotel[] hotels){
 
         for(Hotel hotel: hotels){
             this.hotelMap.put(hotel.getId(), hotel);
         }
     }
 
-    public String findHotelId(String hotelId, boolean printFormat){
+    public Hotel findHotelId(String hotelId){
 
         Hotel hotel = this.hotelMap.get(hotelId);
-        if(printFormat){
-            return hotel.toString();
-        }
+
         String result = "";
 
         if(hotel == null){
             result = "No Hotel found with id : "+hotelId+ System.lineSeparator();
         }else{
-            result += ("The hotel details are: "+System.lineSeparator());
-            result += hotel.getName() + System.lineSeparator();
-            result += hotel+System.lineSeparator();
+            return hotel;
         }
-        return result;
+        return null;
     }
     public void writeOutput( ReviewHandler reviewHandler, String outputFileName){
         for(String hotelId: this.hotelMap.keySet()){

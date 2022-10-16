@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.TreeSet;
+import java.util.concurrent.RecursiveAction;
 
 public class Helper {
 
@@ -44,6 +47,23 @@ public class Helper {
         }
     }
 
+    public static void displayReviews(TreeSet<Review> reviews){
+        for(Review review: reviews){
+            System.out.println(review);
+        }
+    }
+    public static void displayHotel(Hotel hotel){
+        if(hotel == null){
+            System.out.println("No hotel found");
+        }
+        String result = "";
+
+        result += ("The hotel details are: "+System.lineSeparator());
+        result += hotel.getName() + System.lineSeparator();
+        result += hotel+System.lineSeparator();
+        System.out.println(result);
+
+    }
 }
 
 

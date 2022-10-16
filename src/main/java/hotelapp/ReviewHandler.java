@@ -7,10 +7,9 @@ public class ReviewHandler {
     private  Map<String, TreeSet<Review>> hotelReviewMap = new HashMap<>();
     private  Map<String, TreeSet<ReviewWithFreq>> wordToReviews = new HashMap<>();
 
-    public ReviewHandler(ArrayList<Review> reviews){
-        insertReviews(reviews);
-        setUpWords();
+    public ReviewHandler(){
     }
+
     public void insertReviews(ArrayList<Review> reviews){
         for (Review review : reviews) {
             if (!hotelReviewMap.containsKey(review.getHotelId())) {
@@ -49,7 +48,7 @@ public class ReviewHandler {
                                     }
                                     return r2.getReviewSubmissionDate().compareTo(r1.getReviewSubmissionDate());
                                 }
-                                return r2.getFrequency()- r1.getFrequency();
+                                return r2.getFrequency() - r1.getFrequency();
                             }
                         });
                         wordToReviews.put(word, emptyReviewsTree);
@@ -109,8 +108,6 @@ public class ReviewHandler {
 
         for(ReviewWithFreq review: wordToReviews.get(word)){
             System.out.println(review);
-            System.out.println("\tWord count of "+"lll"+" - "+review.getFrequency());
-            System.out.println("*****************");
         }
     }
 }

@@ -33,9 +33,11 @@ public class HotelSearch {
         Hotel[] hotels = fp.parseHotels(arg_map.get("-hotels"));
         ArrayList<Review> reviews = fp.parseReviews(arg_map.get("-reviews"), threads);
 
+        ThreadSafeHotelHandler hotelHandler = new ThreadSafeHotelHandler();
+        hotelHandler.insertHotels(hotels);
 
-        HotelHandler hotelHandler = new HotelHandler(hotels);
-        ReviewHandler reviewHandler = new ReviewHandler(reviews);
+        ThreadSafeReviewHandler reviewHandler = new ThreadSafeReviewHandler();
+        reviewHandler.insertReviews(reviews);
 
         if(arg_map.get("-output") == null){
             processUserQueries(hotelHandler, reviewHandler);
@@ -87,10 +89,10 @@ public class HotelSearch {
                 if(instruction.length == 2){
                     switch (instruction[0]){
                         case "f":
-                            System.out.println(hotelHandler.findHotelId(instruction[1], false));
+                            Helper.displayHotel(hotelHandler.findHotelId(instruction[1]));
                             break;
                         case "r":
-                            System.out.println(reviewHandler.findReviewsByHotelId(instruction[1], false));
+                            Helper.displayReviews(reviewHandler.findReviewsByHotelId(instruction[1], false));
                             break;
                         case "w":
                             reviewHandler.findWords(instruction[1]);

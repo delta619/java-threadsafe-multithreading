@@ -1,12 +1,17 @@
 package hotelapp;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class ReviewWithFreq implements Comparable<ReviewWithFreq> {
 
     private String word;
     private int frequency;
     private Review review;
+
+    private Map<String, Integer> wordFrequency = new HashMap<String, Integer>();
 
     public ReviewWithFreq(Review review, String word){
         this.review = review;
@@ -16,6 +21,10 @@ public class ReviewWithFreq implements Comparable<ReviewWithFreq> {
 
     public int getFrequency() {
         return frequency;
+    }
+
+    public int getWordFrequency(String word){
+        return this.wordFrequency.get(word);
     }
 
     public String getReviewText() {
@@ -33,7 +42,17 @@ public class ReviewWithFreq implements Comparable<ReviewWithFreq> {
         return this.review.getReviewSubmissionDate();
     }
     public String toString() {
-        return String.join(System.lineSeparator()+"\t", "\tHotel id - "+ this.review.getHotelId(), "Review id -"+this.review.getReviewId(), "Overall Rating - "+ this.review.getRatingOverall(),"Title - " + this.review.getTitle(),"Review text - " + this.getReviewText(),"Nickname - " + this.review.getUserNickname(),"Submission time - "+ this.review.getReviewSubmissionDate());
+        String result = System.lineSeparator() + "--------------------" + System.lineSeparator();
+        result += "Review by " + this.review.getUserNickname() + " on " + getReviewSubmissionDate() + System.lineSeparator();
+        result += "Rating: " + this.review.getRatingOverall() + System.lineSeparator();
+        result += "Hotel: " + this.review.getHotelId() + System.lineSeparator();
+        result += "ReviewId: " + getReviewId() + System.lineSeparator();
+        result += "Title: " + this.review.getTitle() + System.lineSeparator();
+        result += "Review Text: " + getReviewText() + System.lineSeparator();
+        result += "Word count of " + word + " - " + getFrequency() + System.lineSeparator();
+
+
+        return result;
     }
 
     @Override
