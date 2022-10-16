@@ -25,16 +25,28 @@ public class HotelSearch {
 
     public static void main(String[] args) {
 
-        Map<String, String> arg_map =  handleCommandLineArgs(args);  // arguments handled
+        Map<String, String> arg_map = handleCommandLineArgs(args);  // arguments handled
+        int threads = Integer.parseInt(arg_map.get("-threads"));
 
         FileProcessor fp = new FileProcessor();
-        Hotel[] hotels = fp.parseHotels(arg_map.get("-hotels"));
-        HotelHandler hotelHandler = new HotelHandler(hotels);
 
-        ArrayList<Review> reviews = fp.parseReviews(arg_map.get("-reviews"));
+        Hotel[] hotels = fp.parseHotels(arg_map.get("-hotels"));
+        ArrayList<Review> reviews = fp.parseReviews(arg_map.get("-reviews"), threads);
+
+
+        HotelHandler hotelHandler = new HotelHandler(hotels);
         ReviewHandler reviewHandler = new ReviewHandler(reviews);
 
-        processUserQueries(hotelHandler, reviewHandler);
+        if(arg_map.get("-output") == null){
+            processUserQueries(hotelHandler, reviewHandler);
+        }else{
+            String outputFile = arg_map.get("-output");
+            Helper.createOutputFiles(outputFile);
+
+            hotelHandler.writeOutput(reviewHandler, outputFile);
+
+            // write to output
+        }
 
     }
 
@@ -47,8 +59,18 @@ public class HotelSearch {
                     arg_map.put(args[i], args[i + 1]);
                 }
             }
-            if(arg_map.get("-hotels") ==null || arg_map.get("-reviews")==null){
-                throw new Exception("Some error occurred") ;
+            if(!arg_map.containsKey("-output")){
+                arg_map.put("-output", null);
+            }
+            if(!arg_map.containsKey("-threads")){
+                arg_map.put("-threads", "1");
+            }
+            if(!arg_map.containsKey("-reviews")){
+                arg_map.put("-reviews", null);
+            }
+
+            if(arg_map.get("-hotels") == null){
+                throw new Exception("Please enter hotel file name.") ;
             }
         }catch (Exception e){
             System.out.println("Invalid arguments, please try again.");
@@ -65,10 +87,10 @@ public class HotelSearch {
                 if(instruction.length == 2){
                     switch (instruction[0]){
                         case "f":
-                            System.out.println(hotelHandler.findHotelId(instruction[1]));
+                            System.out.println(hotelHandler.findHotelId(instruction[1], false));
                             break;
                         case "r":
-                            reviewHandler.findReviewsByHotelId(instruction[1]);
+                            System.out.println(reviewHandler.findReviewsByHotelId(instruction[1], false));
                             break;
                         case "w":
                             reviewHandler.findWords(instruction[1]);

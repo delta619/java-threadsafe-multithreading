@@ -1,26 +1,27 @@
 package hotelapp;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Review implements Comparable<Review> {
     private String hotelId;
     private String reviewId;
-    private double ratingOverall;
+    private int ratingOverall;
     private String title;
     private String reviewText;
     private String userNickname;
-    private LocalDate reviewSubmissionTime;
+    private LocalDate reviewSubmissionDate;
 
-    public Review(String hotelId, String reviewId, double ratingOverall, String title, String reviewText, String userNickname, String reviewSubmissionTime){
+    DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+
+    public Review(String hotelId, String reviewId, int ratingOverall, String title, String reviewText, String userNickname, String reviewSubmissionDate){
         this.hotelId = hotelId;
         this.reviewId = reviewId;
         this.ratingOverall = ratingOverall;
         this.title = title;
         this.reviewText = reviewText;
         this.userNickname = userNickname;
-        this.reviewSubmissionTime = LocalDate.from(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(reviewSubmissionTime));
+        this.reviewSubmissionDate = LocalDate.parse(reviewSubmissionDate, formatter);
     }
 
     public String getReviewId(){
@@ -39,20 +40,28 @@ public class Review implements Comparable<Review> {
         return this.reviewText.split(" ");
     }
     public String getUserNickname(){
-        if(this.userNickname == null){
+        if(this.userNickname.isEmpty()){
             return "Anonymous";
         }
         return this.userNickname;
     }
-    public LocalDate getReviewSubmissionTime(){
-        return this.reviewSubmissionTime;
+    public LocalDate getReviewSubmissionDate(){
+        return this.reviewSubmissionDate;
     }
     @Override
     public String toString() {
-        return String.join(System.lineSeparator()+"\t", "\tHotel id - "+ this.getHotelId(), "Review id -"+this.getReviewId(), "Overall Rating - "+ this.ratingOverall,"Title - " + this.title,"Review text - " + this.reviewText,"Nickname - " + this.getUserNickname(),"Submission time - "+this.reviewSubmissionTime);
+        String result = System.lineSeparator()+"--------------------"+System.lineSeparator();
+        result += "Review by "+getUserNickname()+" on "+ getReviewSubmissionDate()+System.lineSeparator();
+        result += "Rating: " + getRatingOverall() + System.lineSeparator();
+        result += "ReviewId: " + getReviewId() + System.lineSeparator();
+        result += getTitle() + System.lineSeparator();
+        result += getReviewText();
+
+        return result;
+
     }
 
-    public double getRatingOverall() {
+    public int getRatingOverall() {
         return ratingOverall;
     }
 
@@ -67,6 +76,6 @@ public class Review implements Comparable<Review> {
 
     @Override
     public int compareTo(Review o) {
-        return getReviewText().compareTo(o.getReviewText());
+        return getReviewId().compareTo(o.getReviewId());
     }
 }

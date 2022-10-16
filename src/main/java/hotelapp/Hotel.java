@@ -2,7 +2,7 @@ package hotelapp;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Hotel {
+public class Hotel implements Comparable<Hotel> {
 
     @SerializedName("f")
     private String name;
@@ -55,6 +55,10 @@ public class Hotel {
         return state;
     }
 
+    @Override
+    public int compareTo(Hotel hotel) {
+        return getId().compareTo(hotel.getId());
+    }
 
     @Override
     public String toString() {

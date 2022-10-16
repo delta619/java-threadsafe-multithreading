@@ -21,7 +21,7 @@ public class Helper {
     public static void writeFile(String filename, String str){
         try {
             FileWriter myWriter = new FileWriter(filename, true);
-            myWriter.append(str+"\n");
+            myWriter.append(str);
             myWriter.close();
         }catch (Exception e){
             System.out.println("Error occurred while writing.");
@@ -35,7 +35,6 @@ public class Helper {
             myObj1.createNewFile();
 
             PrintWriter writer1 = new PrintWriter(output1_file);
-            writer1.print("");
             writer1.close();
 
 

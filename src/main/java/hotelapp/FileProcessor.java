@@ -52,14 +52,16 @@ public class FileProcessor {
         }
     }
 
-    public ArrayList<Review> parseReviews(String reviewPath){
+    public ArrayList<Review> parseReviews(String reviewPath, int threads){
 
-        findReviewFiles(reviewPath);
 
         ArrayList<Review> reviews= new ArrayList<>();
+        if(reviewPath == null){
+            return reviews;
+        }
+        findReviewFiles(reviewPath);
 
         for(String s: reviewPaths){
-            System.out.println(s);
             Gson gson = new Gson();
             String reviewsFilePath = new File(s).getAbsolutePath();
 
@@ -72,7 +74,7 @@ public class FileProcessor {
                     JsonObject review = e.getAsJsonObject();
                     String hotelId = review.get("hotelId").getAsString();
                     String reviewId = review.get("reviewId").getAsString();
-                    Double ratingOverall = review.get("ratingOverall").getAsDouble();
+                    int ratingOverall = review.get("ratingOverall").getAsInt();
                     String title = review.get("title").getAsString();
                     String reviewText = review.get("reviewText").getAsString();
                     String nickname = review.get("userNickname").getAsString();

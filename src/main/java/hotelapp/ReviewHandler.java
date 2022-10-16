@@ -13,16 +13,20 @@ public class ReviewHandler {
     }
     public void insertReviews(ArrayList<Review> reviews){
         for (Review review : reviews) {
-
             if (!hotelReviewMap.containsKey(review.getHotelId())) {
-                TreeSet<Review> temp = new TreeSet<>((r1, r2)-> r2.getReviewSubmissionTime().compareTo(r1.getReviewSubmissionTime()));
-                hotelReviewMap.put(review.getHotelId(), temp);
+                TreeSet<Review> temp = new TreeSet<>(new Comparator<Review>() {
+                    @Override
+                    public int compare(Review r1, Review r2) {
+                        if(r1.getReviewSubmissionDate().equals(r2.getReviewSubmissionDate())){
+                            return r1.getReviewId().compareTo(r2.getReviewId());
+                        }
+                        return r2.getReviewSubmissionDate().compareTo(r1.getReviewSubmissionDate());
+                    }
+                });
+                this.hotelReviewMap.put(review.getHotelId(), temp);
             }
-            hotelReviewMap.get(review.getHotelId()).add(review);
+            this.hotelReviewMap.get(review.getHotelId()).add(review);
         }
-
-        this.setUpWords();
-
     }
     public void setUpWords(){
 
@@ -40,7 +44,10 @@ public class ReviewHandler {
                         TreeSet<ReviewWithFreq> emptyReviewsTree = new TreeSet<>(new Comparator<ReviewWithFreq>() {
                             public int compare(ReviewWithFreq r1, ReviewWithFreq r2) {
                                 if (r1.getFrequency() == r2.getFrequency()) {
-                                    return r2.getReviewSubmissionTime().compareTo(r1.getReviewSubmissionTime());
+                                    if(r2.getReviewSubmissionDate().equals(r1.getReviewSubmissionDate())){
+                                        return r1.getReviewId().compareTo(r2.getReviewId());
+                                    }
+                                    return r2.getReviewSubmissionDate().compareTo(r1.getReviewSubmissionDate());
                                 }
                                 return r2.getFrequency()- r1.getFrequency();
                             }
@@ -52,16 +59,25 @@ public class ReviewHandler {
             }
         }
     }
-    public void findReviewsByHotelId(String hotelId){
-        if(!hotelReviewMap.containsKey(hotelId)){
-            System.out.println("No Reviews for hotelID - "+hotelId);
-            return;
-        }
-        TreeSet<Review> reviews = hotelReviewMap.get(hotelId);
-            for(Review review: reviews){
-                System.out.println(review);
-                System.out.println("**********************");
+    public TreeSet<Review> findReviewsByHotelId(String hotelId, Boolean printFormat){
+
+        TreeSet<Review> reviews = new TreeSet<>();
+        if(printFormat){
+            if(hotelReviewMap.containsKey(hotelId)){
+                return hotelReviewMap.get(hotelId);
             }
+        }else{
+            if(!hotelReviewMap.containsKey(hotelId)){
+                System.out.println("No Reviews for hotelID - " + hotelId);
+            }else{
+                for(Review review: hotelReviewMap.get(hotelId)){
+                    System.out.println(review);
+                }
+            }
+        }
+
+        return reviews;
+
     }
 
     public static HashSet<String> getStopWords(){
@@ -93,20 +109,8 @@ public class ReviewHandler {
 
         for(ReviewWithFreq review: wordToReviews.get(word)){
             System.out.println(review);
-            System.out.println("\tWord count of "+word+" - "+review.getFrequency());
+            System.out.println("\tWord count of "+"lll"+" - "+review.getFrequency());
             System.out.println("*****************");
         }
     }
-
-    public int countWords(String line, String checkWord){
-        line = line.replaceAll("\\p{Punct}", " ");
-        int cnt = 0;
-        for(String word: line.split(" ")){
-            if(word.equalsIgnoreCase(checkWord)){
-                cnt++;
-            }
-        }
-        return cnt;
-    };
-
 }

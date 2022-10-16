@@ -1,7 +1,6 @@
 package hotelapp;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class ReviewWithFreq implements Comparable<ReviewWithFreq> {
 
@@ -27,11 +26,14 @@ public class ReviewWithFreq implements Comparable<ReviewWithFreq> {
         return word;
     }
 
-    public LocalDate getReviewSubmissionTime(){
-        return this.review.getReviewSubmissionTime();
+    public String getReviewId(){
+        return this.review.getReviewId();
+    }
+    public LocalDate getReviewSubmissionDate(){
+        return this.review.getReviewSubmissionDate();
     }
     public String toString() {
-        return String.join(System.lineSeparator()+"\t", "\tHotel id - "+ this.review.getHotelId(), "Review id -"+this.review.getReviewId(), "Overall Rating - "+ this.review.getRatingOverall(),"Title - " + this.review.getTitle(),"Review text - " + this.getReviewText(),"Nickname - " + this.review.getUserNickname(),"Submission time - "+ this.review.getReviewSubmissionTime());
+        return String.join(System.lineSeparator()+"\t", "\tHotel id - "+ this.review.getHotelId(), "Review id -"+this.review.getReviewId(), "Overall Rating - "+ this.review.getRatingOverall(),"Title - " + this.review.getTitle(),"Review text - " + this.getReviewText(),"Nickname - " + this.review.getUserNickname(),"Submission time - "+ this.review.getReviewSubmissionDate());
     }
 
     @Override
