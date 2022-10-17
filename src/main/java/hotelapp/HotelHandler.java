@@ -5,9 +5,6 @@ import java.util.*;
 public class HotelHandler {
     private Map<String, Hotel> hotelMap = new TreeMap<>(String::compareTo);
 
-    public HotelHandler(){
-    }
-
     public void insertHotels(Hotel[] hotels){
 
         for(Hotel hotel: hotels){
@@ -22,7 +19,7 @@ public class HotelHandler {
         String result = "";
 
         if(hotel == null){
-            result = "No Hotel found with id : "+hotelId+ System.lineSeparator();
+            result = "No Hotel found with id : " + hotelId + System.lineSeparator();
         }else{
             return hotel;
         }

@@ -23,8 +23,6 @@ public class FileProcessor {
     FileProcessor(ThreadSafeReviewHandler threadSafeReviewHandler, int numberOfThreads){
         this.threadSafeReviewHandler = threadSafeReviewHandler;
         poolOfThreads = Executors.newFixedThreadPool(numberOfThreads);
-//        poolOfThreads = Executors.newFixedThreadPool(1);
-
         phaser = new Phaser();
     }
 
@@ -70,19 +68,14 @@ public class FileProcessor {
         } catch (IOException e) {
             System.out.println("Could not read the file:" + e);
         }
-
      return null;
     }
-
-//    ArrayList<String> reviewPaths = new ArrayList<>();
 
     public void traverseReviewFiles(String directory) {
         if(directory == null)return;
         Path p = Paths.get(directory);
         try (DirectoryStream<Path> pathsInDir = Files.newDirectoryStream(p)) {
             for (Path path : pathsInDir) {
-                System.out.println(path);
-
                 if(Files.isDirectory(path)){
                     traverseReviewFiles(path.toString());
                 }
@@ -90,8 +83,6 @@ public class FileProcessor {
                     Worker worker = new Worker(path);
                     phaser.register();
                     poolOfThreads.submit(worker);
-//                    parseReviews(path.toString());
-//                    reviewPaths.add(path.toString());
                 }
             }
         } catch (IOException e) {
@@ -104,14 +95,6 @@ public class FileProcessor {
     }
 
     public void parseReviews(String currReviewPath){
-
-//        if(reviewPath == null){
-//            return reviews;
-//        }
-//        traverseReviewFiles(reviewPath);
-
-//        for(String s: reviewPaths){
-//            Gson gson = new Gson();
         ArrayList<Review> reviews = new ArrayList<>();
 
             String reviewsFilePath = new File(currReviewPath).getAbsolutePath();
@@ -138,8 +121,6 @@ public class FileProcessor {
             } catch (IOException e) {
                 System.out.println("Could not read the file:" + e);
             }
-
             this.threadSafeReviewHandler.insertReviews(reviews);
     }
-
 }

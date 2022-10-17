@@ -62,10 +62,10 @@ public class Hotel implements Comparable<Hotel> {
 
     @Override
     public String toString() {
-        String result = System.lineSeparator()+"********************";
-        result+=System.lineSeparator()+ getName()+": "+getId();
-        result+=System.lineSeparator()+getAddress();
-        result+=System.lineSeparator()+getCity()+", "+getState();
+        String result = System.lineSeparator() + "********************";
+        result += System.lineSeparator() + getName() + ": " + getId();
+        result += System.lineSeparator() + getAddress();
+        result += System.lineSeparator() + getCity() + ", " + getState();
         return result;
 //        ********************
 //        Hilton San Francisco Union Square: 25622

@@ -50,8 +50,8 @@ public class Review implements Comparable<Review> {
     }
     @Override
     public String toString() {
-        String result = System.lineSeparator()+"--------------------"+System.lineSeparator();
-        result += "Review by "+getUserNickname()+" on "+ getReviewSubmissionDate()+System.lineSeparator();
+        String result = System.lineSeparator() + "--------------------"+System.lineSeparator();
+        result += "Review by " + getUserNickname() + " on " + getReviewSubmissionDate()+System.lineSeparator();
         result += "Rating: " + getRatingOverall() + System.lineSeparator();
         result += "ReviewId: " + getReviewId() + System.lineSeparator();
         result += getTitle() + System.lineSeparator();

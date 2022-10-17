@@ -7,9 +7,6 @@ public class ReviewHandler {
     private  Map<String, TreeSet<Review>> hotelReviewMap = new HashMap<>();
     private  Map<String, TreeSet<ReviewWithFreq>> wordToReviews = new HashMap<>();
 
-    public ReviewHandler(){
-    }
-
     public void insertReviews(ArrayList<Review> reviews){
         for (Review review : reviews) {
             if (!hotelReviewMap.containsKey(review.getHotelId())) {
@@ -28,9 +25,7 @@ public class ReviewHandler {
         }
     }
     public void setUpWords(){
-
         HashSet<String> stopWords = getStopWords();
-
         for (String hotelId: hotelReviewMap.keySet()){
             TreeSet<Review> hotelReviews = hotelReviewMap.get(hotelId);
             for(Review currReview: hotelReviews){
@@ -58,8 +53,8 @@ public class ReviewHandler {
             }
         }
     }
-    public TreeSet<Review> findReviewsByHotelId(String hotelId, Boolean printFormat){
 
+    public TreeSet<Review> findReviewsByHotelId(String hotelId, Boolean printFormat){
         TreeSet<Review> reviews = new TreeSet<>();
         if(printFormat){
             if(hotelReviewMap.containsKey(hotelId)){
@@ -74,9 +69,7 @@ public class ReviewHandler {
                 }
             }
         }
-
         return reviews;
-
     }
 
     public static HashSet<String> getStopWords(){
@@ -99,15 +92,16 @@ public class ReviewHandler {
         }
         return m;
     }
+
     public void findWords(String word){
         word = word.toLowerCase(); // convert to lowercase before findind in hashmap because keys are stored in lowercase
         if(!wordToReviews.containsKey(word)){
-            System.out.println("No reviews found with word "+word);
+            System.out.println("No reviews found with word " + word);
             return;
         }
-
         for(ReviewWithFreq review: wordToReviews.get(word)){
             System.out.println(review);
         }
     }
+
 }
