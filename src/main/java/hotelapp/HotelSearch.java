@@ -26,32 +26,37 @@ public class HotelSearch {
     public static void main(String[] args) {
 
         Map<String, String> arg_map = handleCommandLineArgs(args);  // arguments handled
-        int threads = Integer.parseInt(arg_map.get("-threads"));
-
-        FileProcessor fp = new FileProcessor();
-
-        Hotel[] hotels = fp.parseHotels(arg_map.get("-hotels"));
-        ArrayList<Review> reviews = fp.parseReviews(arg_map.get("-reviews"), threads);
 
         ThreadSafeHotelHandler hotelHandler = new ThreadSafeHotelHandler();
+        ThreadSafeReviewHandler reviewHandler = new ThreadSafeReviewHandler();
+
+        FileProcessor fp = new FileProcessor(reviewHandler, Integer.parseInt(arg_map.get("-threads")));
+
+        Hotel[] hotels = fp.parseHotels(arg_map.get("-hotels"));
         hotelHandler.insertHotels(hotels);
 
-        ThreadSafeReviewHandler reviewHandler = new ThreadSafeReviewHandler();
-        reviewHandler.insertReviews(reviews);
+        if(!(arg_map.get("-reviews") == null)){
+            fp.initiateReviewInsertion(arg_map.get("-reviews"));
+            try{
+                fp.shutDownThreads();
+                System.out.println("Threads completed");
+            } catch (Exception e){
+                System.out.println("Some error in threads");
+            }
+        }
+
+
 
         if(arg_map.get("-output") == null){
+            reviewHandler.setUpWords();
             processUserQueries(hotelHandler, reviewHandler);
         }else{
             String outputFile = arg_map.get("-output");
             Helper.createOutputFiles(outputFile);
 
             hotelHandler.writeOutput(reviewHandler, outputFile);
-
-            // write to output
         }
-
     }
-
 
     static Map<String, String> handleCommandLineArgs(String[] args){
         Map<String, String> arg_map = new HashMap<>();

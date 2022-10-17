@@ -10,8 +10,49 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Phaser;
+import java.util.concurrent.TimeUnit;
+
 
 public class FileProcessor {
+    private ThreadSafeReviewHandler threadSafeReviewHandler;
+    private ExecutorService poolOfThreads;
+    private Phaser phaser;
+    FileProcessor(ThreadSafeReviewHandler threadSafeReviewHandler, int numberOfThreads){
+        this.threadSafeReviewHandler = threadSafeReviewHandler;
+        poolOfThreads = Executors.newFixedThreadPool(numberOfThreads);
+//        poolOfThreads = Executors.newFixedThreadPool(1);
+
+        phaser = new Phaser();
+    }
+
+    class Worker implements Runnable{
+        Path path;
+        public Worker(Path path){
+            this.path = path;
+        }
+
+        @Override
+        public void run(){
+            try{
+                parseReviews(this.path.toString());
+            }
+            finally {
+                phaser.arriveAndDeregister();
+            }
+        }
+    }
+
+    public void shutDownThreads() throws InterruptedException{
+        try{
+            phaser.awaitAdvance(phaser.getPhase());
+        } finally {
+            poolOfThreads.shutdown();
+            poolOfThreads.awaitTermination(3, TimeUnit.SECONDS);
+        }
+    }
 
     public Hotel[] parseHotels(String filepath){
 
@@ -28,23 +69,29 @@ public class FileProcessor {
 
         } catch (IOException e) {
             System.out.println("Could not read the file:" + e);
-
         }
 
      return null;
     }
 
-    ArrayList<String> reviewPaths = new ArrayList<>();
-    public void findReviewFiles(String directory) {
+//    ArrayList<String> reviewPaths = new ArrayList<>();
+
+    public void traverseReviewFiles(String directory) {
+        if(directory == null)return;
         Path p = Paths.get(directory);
         try (DirectoryStream<Path> pathsInDir = Files.newDirectoryStream(p)) {
             for (Path path : pathsInDir) {
+                System.out.println(path);
 
                 if(Files.isDirectory(path)){
-                    findReviewFiles(path.toString());
+                    traverseReviewFiles(path.toString());
                 }
                 if (path.toString().endsWith(".json")){
-                    reviewPaths.add(path.toString());
+                    Worker worker = new Worker(path);
+                    phaser.register();
+                    poolOfThreads.submit(worker);
+//                    parseReviews(path.toString());
+//                    reviewPaths.add(path.toString());
                 }
             }
         } catch (IOException e) {
@@ -52,18 +99,22 @@ public class FileProcessor {
         }
     }
 
-    public ArrayList<Review> parseReviews(String reviewPath, int threads){
+    public void initiateReviewInsertion(String parentReviewPath){
+        traverseReviewFiles(parentReviewPath);
+    }
 
+    public void parseReviews(String currReviewPath){
 
-        ArrayList<Review> reviews= new ArrayList<>();
-        if(reviewPath == null){
-            return reviews;
-        }
-        findReviewFiles(reviewPath);
+//        if(reviewPath == null){
+//            return reviews;
+//        }
+//        traverseReviewFiles(reviewPath);
 
-        for(String s: reviewPaths){
-            Gson gson = new Gson();
-            String reviewsFilePath = new File(s).getAbsolutePath();
+//        for(String s: reviewPaths){
+//            Gson gson = new Gson();
+        ArrayList<Review> reviews = new ArrayList<>();
+
+            String reviewsFilePath = new File(currReviewPath).getAbsolutePath();
 
             try (FileReader br = new FileReader(reviewsFilePath)) {
                 JsonParser parser = new JsonParser();
@@ -88,8 +139,7 @@ public class FileProcessor {
                 System.out.println("Could not read the file:" + e);
             }
 
-        }
-        return reviews;
+            this.threadSafeReviewHandler.insertReviews(reviews);
     }
 
 }

@@ -49,7 +49,7 @@ public class ReviewWithFreq implements Comparable<ReviewWithFreq> {
         result += "ReviewId: " + getReviewId() + System.lineSeparator();
         result += "Title: " + this.review.getTitle() + System.lineSeparator();
         result += "Review Text: " + getReviewText() + System.lineSeparator();
-        result += "Word count of " + word + " - " + getFrequency() + System.lineSeparator();
+        result += "Word count of " + "x" + " - " + getFrequency() + System.lineSeparator();
 
 
         return result;
