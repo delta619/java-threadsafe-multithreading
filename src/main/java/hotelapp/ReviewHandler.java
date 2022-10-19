@@ -104,4 +104,14 @@ public class ReviewHandler {
         }
     }
 
+    /**
+     * This method responsible for displaying the reviews.
+     * @param reviews of the hotel.
+     * */
+    public static void displayReviews(TreeSet<Review> reviews){
+        for(Review review: reviews){
+            System.out.println(review);
+        }
+    }
+
 }

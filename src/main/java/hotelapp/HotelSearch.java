@@ -39,7 +39,6 @@ public class HotelSearch {
             fp.initiateReviewInsertion(arg_map.get("-reviews"));
             try{
                 fp.shutDownThreads();
-                System.out.println("Threads completed");
             } catch (Exception e){
                 System.out.println("Some error in threads");
             }
@@ -58,6 +57,9 @@ public class HotelSearch {
         }
     }
 
+    /** This method is responsible for handling the command line argument passed.
+     * @param args the current filepath of review json file
+     * */
     static Map<String, String> handleCommandLineArgs(String[] args){
         Map<String, String> arg_map = new HashMap<>();
         try {
@@ -85,6 +87,10 @@ public class HotelSearch {
         return arg_map;
     }
 
+    /** This method is responsible for processing user queries and process user input for each query.
+     * @param hotelHandler hotelHandler
+     * @param reviewHandler reviewHandler
+     * */
     public static void processUserQueries(HotelHandler hotelHandler, ReviewHandler reviewHandler){
         try{
             Scanner sc = new Scanner(System.in);
@@ -94,10 +100,10 @@ public class HotelSearch {
                 if(instruction.length == 2){
                     switch (instruction[0]){
                         case "f":
-                            Helper.displayHotel(hotelHandler.findHotelId(instruction[1]));
+                            hotelHandler.displayHotel(hotelHandler.findHotelId(instruction[1]));
                             break;
                         case "r":
-                            Helper.displayReviews(reviewHandler.findReviewsByHotelId(instruction[1], false));
+                            reviewHandler.displayReviews(reviewHandler.findReviewsByHotelId(instruction[1], false));
                             break;
                         case "w":
                             reviewHandler.findWords(instruction[1]);

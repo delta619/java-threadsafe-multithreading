@@ -10,6 +10,12 @@ import java.util.concurrent.RecursiveAction;
 
 public class Helper {
 
+    /**
+     * This method return the count of word in a string after removing punctuation.
+     * @param line the parent sentence
+     * @param checkWord the word for which we need to find the frequency.
+     * @return frequency of the checkWord in the line.
+     * */
     public static int countWords(String line, String checkWord){
         line = line.replaceAll("\\p{Punct}", " ");
         int cnt = 0;
@@ -21,6 +27,11 @@ public class Helper {
         return cnt;
     };
 
+    /**
+     * This method writes the str in the filename.
+     * @param filename
+     * @param str the data which needs to be written.
+     * */
     public static void writeFile(String filename, String str){
         try {
             FileWriter myWriter = new FileWriter(filename, true);
@@ -30,14 +41,19 @@ public class Helper {
             System.out.println("Error occurred while writing.");
         }
     }
-    public static void createOutputFiles(String output1_file){
 
-        File myObj1 = new File(output1_file);
+    /**
+     * This method creates the ouput file.
+     * @param outputFile the output file name.
+     * */
+    public static void createOutputFiles(String outputFile){
+
+        File myObj1 = new File(outputFile);
 
         try {
             myObj1.createNewFile();
 
-            PrintWriter writer1 = new PrintWriter(output1_file);
+            PrintWriter writer1 = new PrintWriter(outputFile);
             writer1.close();
 
 
@@ -47,23 +63,6 @@ public class Helper {
         }
     }
 
-    public static void displayReviews(TreeSet<Review> reviews){
-        for(Review review: reviews){
-            System.out.println(review);
-        }
-    }
-    public static void displayHotel(Hotel hotel){
-        if(hotel == null){
-            System.out.println("No hotel found");
-        }
-        String result = "";
-
-        result += ("The hotel details are: "+System.lineSeparator());
-        result += hotel.getName() + System.lineSeparator();
-        result += hotel+System.lineSeparator();
-        System.out.println(result);
-
-    }
 }
 
 

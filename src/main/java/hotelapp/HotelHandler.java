@@ -34,4 +34,22 @@ public class HotelHandler {
                     Helper.writeFile(outputFileName, System.lineSeparator());
         }
     }
+
+    /**
+     * This method responsible for displaying the hotel.
+     * @param hotel of the hotel.
+     * */
+    public void displayHotel(Hotel hotel){
+        if(hotel == null){
+            System.out.println("No hotel found");
+            return;
+        }
+        String result = "";
+
+        result += ("The hotel details are: "+System.lineSeparator());
+        result += hotel.getName() + System.lineSeparator();
+        result += hotel+System.lineSeparator();
+        System.out.println(result);
+
+    }
 }
