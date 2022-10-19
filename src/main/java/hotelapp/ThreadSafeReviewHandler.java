@@ -3,6 +3,9 @@ package hotelapp;
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+/**
+ * This Class manages the methods of its parent class ReviewHandler in a thread safe way.
+ * */
 public class ThreadSafeReviewHandler extends ReviewHandler{
 
     ReentrantReadWriteLock lock;
